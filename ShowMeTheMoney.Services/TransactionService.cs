@@ -44,7 +44,7 @@ namespace ShowMeTheMoney.Services
         private void AddTransactionToList(decimal amount, string description, decimal oldBalance, decimal newBalance)
         {
             // TODO: Add the transaction to the log
-            // BONUS: Can you use the class to limit this method to 2 parameters?
+            // BONUS: Can you use the class to reduce the parameters?
         }
     }
 }
