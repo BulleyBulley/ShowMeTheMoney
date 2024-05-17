@@ -1,9 +1,13 @@
-﻿namespace ShowMeTheMoney.ConsoleApp
+﻿using ShowMeTheMoney.Services;
+
+namespace ShowMeTheMoney.ConsoleApp
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            
+
             // Task 1: Instantiate a TransactionService with a balance of 200 and inform the user that this has happened
 
             // Task 2: Deposit 1500 and return the balance in a readable format
@@ -17,6 +21,12 @@
             // Task 6: If yes, ask the user if they want to deposit or withdraw, and handle accordingly
 
             // Task 7: Print the transaction list to the user
+
+            
+
+
         }
+
+        
     }
 }

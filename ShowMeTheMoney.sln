@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowMeTheMoney.Models", "Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowMeTheMoney.ConsoleApp", "ShowMeTheMoney.ConsoleApp\ShowMeTheMoney.ConsoleApp.csproj", "{3F795E8E-F3F5-4D09-9B53-05BE6730B28D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowMeTheMoney.Services", "ShowMeTheMoney.Services\ShowMeTheMoney.Services.csproj", "{893CA60C-138C-496E-BB7C-E4C3652C9900}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShowMeTheMoney.Services", "ShowMeTheMoney.Services\ShowMeTheMoney.Services.csproj", "{893CA60C-138C-496E-BB7C-E4C3652C9900}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowMeTheMoneyTestProject", "ShowMeTheMoneyTestProject\ShowMeTheMoneyTestProject.csproj", "{4665C8C1-EA83-43BC-A6A4-63E9DE6F0AD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{893CA60C-138C-496E-BB7C-E4C3652C9900}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{893CA60C-138C-496E-BB7C-E4C3652C9900}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{893CA60C-138C-496E-BB7C-E4C3652C9900}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4665C8C1-EA83-43BC-A6A4-63E9DE6F0AD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4665C8C1-EA83-43BC-A6A4-63E9DE6F0AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4665C8C1-EA83-43BC-A6A4-63E9DE6F0AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4665C8C1-EA83-43BC-A6A4-63E9DE6F0AD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

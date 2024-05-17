@@ -28,7 +28,17 @@ namespace ShowMeTheMoney.Services
         /// <returns></returns>
         public decimal Deposit(Deposit deposit)
         {
-            // TODO: Implement updating the balance and returning it. Add the transaction to the log.
+            decimal oldBalance = _balance;
+            _balance += deposit.Amount;
+            decimal newBalance = _balance;
+
+            // Create a transaction object
+            TransactionLog transactionLog = new TransactionLog(deposit.Amount, "Deposit", oldBalance, newBalance);
+
+            // Add the transaction to the list
+            AddTransactionToList(transactionLog);
+
+            return newBalance;
         }
 
         /// <summary>
@@ -38,13 +48,31 @@ namespace ShowMeTheMoney.Services
         /// <returns></returns>
         public decimal Withdraw(Withdrawal withdrawal)
         {
-            // TODO: Implement updating the balance and returning it. Add the transaction to the log.
+            decimal oldBalance = _balance;
+            _balance -= withdrawal.Amount;
+            decimal newBalance = _balance;
+
+            // Create a transaction object
+            TransactionLog transactionLog = new TransactionLog(withdrawal.Amount, "Withdrawal", oldBalance, newBalance);
+
+            // Add the transaction to the list
+            AddTransactionToList(transactionLog);
+
+            return newBalance;
         }
 
-        private void AddTransactionToList(decimal amount, string description, decimal oldBalance, decimal newBalance)
+        private void AddTransactionToList(TransactionLog transactionLog)
         {
+
             // TODO: Add the transaction to the log
             // BONUS: Can you use the class to reduce the parameters?
+
+            _transactionLog.Add(transactionLog);
+        }
+
+        public List<TransactionLog> GetTransactionLog()
+        {
+            return _transactionLog;
         }
     }
 }
