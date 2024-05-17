@@ -3,7 +3,7 @@ using ShowMeTheMoney.Services;
 
 namespace ShowMeTheMoneyTestProject
 {
-    public class Tests
+    public class TestTransactionService
     {
         [SetUp]
         public void Setup()
