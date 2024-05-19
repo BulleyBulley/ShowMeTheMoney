@@ -76,7 +76,7 @@ namespace ShowMeTheMoneyTestProject
         }
 
         [Test]
-        // Depositing 100 and withdrawing 50 should result in a transaction log with 2 entries
+        // Depositing 100 and withdrawing 50 should result in a transaction log with 3 entries (setup creates one)
         public void DepositAndWithdrawGivesCorrectTransactionLogAmount()
         {
             // Arrange
@@ -90,7 +90,7 @@ namespace ShowMeTheMoneyTestProject
             List<TransactionLog> transactionLog = transactionService.GetTransactionLog();
 
             // Assert
-            Assert.That(transactionLog.Count, Is.EqualTo(2));
+            Assert.That(transactionLog.Count, Is.EqualTo(3));
         }
 
         [Test]
@@ -108,10 +108,12 @@ namespace ShowMeTheMoneyTestProject
             List<TransactionLog> transactionLog = transactionService.GetTransactionLog();
 
             // Assert
-            Assert.That(transactionLog[0].Amount, Is.EqualTo(100m));
-            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Deposit));
-            Assert.That(transactionLog[1].Amount, Is.EqualTo(50m));
-            Assert.That(transactionLog[1].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Withdrawal));
+            Assert.That(transactionLog[0].Amount, Is.EqualTo(200m));
+            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Setup));
+            Assert.That(transactionLog[1].Amount, Is.EqualTo(100m));
+            Assert.That(transactionLog[1].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Deposit));
+            Assert.That(transactionLog[2].Amount, Is.EqualTo(50m));
+            Assert.That(transactionLog[2].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Withdrawal));
         }
 
         [Test]
@@ -129,10 +131,14 @@ namespace ShowMeTheMoneyTestProject
             List<TransactionLog> transactionLog = transactionService.GetTransactionLog();
 
             // Assert
-            Assert.That(transactionLog[0].OldBalance, Is.EqualTo(200m));
-            Assert.That(transactionLog[0].NewBalance, Is.EqualTo(300m));
-            Assert.That(transactionLog[1].OldBalance, Is.EqualTo(300m));
-            Assert.That(transactionLog[1].NewBalance, Is.EqualTo(250m));
+            Assert.That(transactionLog[0].OldBalance, Is.EqualTo(0m));
+            Assert.That(transactionLog[0].NewBalance, Is.EqualTo(200m));
+            Assert.That(transactionLog[1].OldBalance, Is.EqualTo(200m));
+            Assert.That(transactionLog[1].NewBalance, Is.EqualTo(300m));
+            Assert.That(transactionLog[2].OldBalance, Is.EqualTo(300m));
+            Assert.That(transactionLog[2].NewBalance, Is.EqualTo(250m));
+
+
         }
 
         [Test]
@@ -165,5 +171,68 @@ namespace ShowMeTheMoneyTestProject
             //Assert
             Assert.IsTrue(canWithdraw);
         }
+
+        [Test]
+        //CanWithdraw returns true with exact balance
+        public void CanWithdrawReturnsTrueWithExactBalance()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+            Withdrawal withdrawal = new Withdrawal { Amount = 200m };
+
+            // Act
+            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
+
+            //Assert
+            Assert.IsTrue(canWithdraw);
+        }
+
+        [Test]
+        //CanWithdraw returns true with more than enough balance
+        public void CanWithdrawReturnsTrueWithMoreThanEnoughBalance()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+            Withdrawal withdrawal = new Withdrawal { Amount = 50m };
+
+            // Act
+            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
+
+            //Assert
+            Assert.IsTrue(canWithdraw);
+        }
+
+        [Test]
+        //CanWithdraw returns false with negative balance
+        public void CanWithdrawReturnsFalseWithNegativeBalance()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+            Withdrawal withdrawal = new Withdrawal { Amount = 5000m };
+
+            // Act
+            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
+
+            //Assert
+            Assert.IsFalse(canWithdraw);
+        }
+
+        [Test]
+        // a setup transation log is created on initialisation
+        public void SetupTransactionLogIsCreatedOnInitialisation()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+
+            // Act
+            List<TransactionLog> transactionLog = transactionService.GetTransactionLog();
+
+            // Assert
+            Assert.That(transactionLog.Count, Is.EqualTo(1));
+            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Setup));
+        }
+
+
+
     }
 }
