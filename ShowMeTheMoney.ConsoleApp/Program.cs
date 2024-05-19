@@ -7,11 +7,10 @@ namespace ShowMeTheMoney.ConsoleApp
     {
         private TransactionService _transactionService = new TransactionService(200m);
         private CommunicateUser _communicateUser = new CommunicateUser();
-        private int dialogPause = 1500;
+        private int dialogPause = 1000;
         static void Main(string[] args)
         {
-
-            var program = new Program();
+            Program program = new Program();
             program.RunApp();
 
             // Task 1: Instantiate a TransactionService with a balance of 200 and inform the user that this has happened
@@ -48,6 +47,7 @@ namespace ShowMeTheMoney.ConsoleApp
         private void InitialDeposits()
         {
             _communicateUser.InformUser("Congratulations!! A not at all suspicious email has given you £200");
+            //pause to make the dialog more readable
             System.Threading.Thread.Sleep(dialogPause);
             _communicateUser.InformUser("And now they're depositing a further £1500 into your account");
             System.Threading.Thread.Sleep(dialogPause);
@@ -68,15 +68,18 @@ namespace ShowMeTheMoney.ConsoleApp
 
                 if (_transactionService.CanWithdraw(withdrawalAmount))
                 {
+                    _transactionService.Withdraw(new Withdrawal { Amount = withdrawalAmount });
                     break;
                 }
 
                 _communicateUser.InformUser("Insufficient funds. Please enter a different amount.");
             }
-
-            _transactionService.Withdraw(new Withdrawal { Amount = withdrawalAmount });
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
+            DepositHalfWithdrawal(withdrawalAmount);
+        }
 
+        private void DepositHalfWithdrawal(decimal withdrawalAmount)
+        {
             Thread.Sleep(dialogPause);
 
             // Limit to 2 decimal places

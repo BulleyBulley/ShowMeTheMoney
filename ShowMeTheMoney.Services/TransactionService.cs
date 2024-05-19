@@ -1,5 +1,6 @@
 ﻿using ShowMeTheMoney.Models;
 
+
 namespace ShowMeTheMoney.Services
 {
     public class TransactionService
@@ -10,6 +11,9 @@ namespace ShowMeTheMoney.Services
         public TransactionService(decimal initialBalance)
         {
             _balance = initialBalance;
+            TransactionLog transactionLog = new TransactionLog(initialBalance, TransactionLog.TransactionType.Setup, 0, initialBalance);
+
+            AddTransactionToList(transactionLog);
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace ShowMeTheMoney.Services
             decimal newBalance = _balance;
 
             // Create a transaction object
-            TransactionLog transactionLog = new TransactionLog(deposit.Amount, "Deposit", oldBalance, newBalance);
+            TransactionLog transactionLog = new TransactionLog(deposit.Amount, TransactionLog.TransactionType.Deposit, oldBalance, newBalance);
 
             // Add the transaction to the list
             AddTransactionToList(transactionLog);
@@ -53,7 +57,7 @@ namespace ShowMeTheMoney.Services
             decimal newBalance = _balance;
 
             // Create a transaction object
-            TransactionLog transactionLog = new TransactionLog(withdrawal.Amount, "Withdrawal", oldBalance, newBalance);
+            TransactionLog transactionLog = new TransactionLog(withdrawal.Amount, TransactionLog.TransactionType.Withdrawal, oldBalance, newBalance);
 
             // Add the transaction to the list
             AddTransactionToList(transactionLog);

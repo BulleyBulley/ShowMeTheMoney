@@ -109,9 +109,9 @@ namespace ShowMeTheMoneyTestProject
 
             // Assert
             Assert.That(transactionLog[0].Amount, Is.EqualTo(100m));
-            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo("Deposit"));
+            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Deposit));
             Assert.That(transactionLog[1].Amount, Is.EqualTo(50m));
-            Assert.That(transactionLog[1].TransactionDescription, Is.EqualTo("Withdrawal"));
+            Assert.That(transactionLog[1].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Withdrawal));
         }
 
         [Test]
