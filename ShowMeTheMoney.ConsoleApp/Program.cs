@@ -7,6 +7,7 @@ namespace ShowMeTheMoney.ConsoleApp
     {
         private TransactionService _transactionService = new TransactionService(200m);
         private CommunicateUser _communicateUser = new CommunicateUser();
+        private int dialogPause = 1500;
         static void Main(string[] args)
         {
 
@@ -47,9 +48,9 @@ namespace ShowMeTheMoney.ConsoleApp
         private void InitialDeposits()
         {
             _communicateUser.InformUser("Congratulations!! A not at all suspicious email has given you £200");
-            System.Threading.Thread.Sleep(1500);
+            System.Threading.Thread.Sleep(dialogPause);
             _communicateUser.InformUser("And now they're depositing a further £1500 into your account");
-            System.Threading.Thread.Sleep(1500);
+            System.Threading.Thread.Sleep(dialogPause);
             _transactionService.Deposit(new Deposit { Amount = 1500m });
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
         }
@@ -75,6 +76,8 @@ namespace ShowMeTheMoney.ConsoleApp
 
             _transactionService.Withdraw(new Withdrawal { Amount = withdrawalAmount });
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
+
+            Thread.Sleep(dialogPause);
 
             // Limit to 2 decimal places
             decimal depositAmount = decimal.Round(withdrawalAmount / 2, 2);
@@ -163,13 +166,15 @@ namespace ShowMeTheMoney.ConsoleApp
             while (true)
             {
                 string input = _communicateUser.GetUserInput(prompt);
-                if (!string.IsNullOrWhiteSpace(input) && decimal.TryParse(input, out amount))
+                // Check if the input is a valid decimal number and greater than 0
+                if (!string.IsNullOrWhiteSpace(input) && decimal.TryParse(input, out amount) && amount > 0)
                 {
                     return amount;
                 }
-                _communicateUser.InformUser("Invalid amount. Please enter a valid decimal number.");
+                _communicateUser.InformUser("Invalid amount. Please enter a valid decimal number greater than 0.");
             }
         }
+
 
 
     }
