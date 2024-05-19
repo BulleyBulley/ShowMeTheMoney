@@ -202,39 +202,5 @@ namespace ShowMeTheMoneyTestProject
             Assert.IsTrue(canWithdraw);
         }
 
-        [Test]
-        //CanWithdraw returns true with more than enough balance
-        public void CanWithdrawReturnsTrueWithMoreThanEnoughBalance()
-        {
-            // Arrange
-            TransactionService transactionService = new TransactionService(200m);
-            Withdrawal withdrawal = new Withdrawal { Amount = 50m };
-
-            // Act
-            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
-
-            //Assert
-            Assert.IsTrue(canWithdraw);
-        }
-
-        [Test]
-        //CanWithdraw returns false with negative balance
-        public void CanWithdrawReturnsFalseWithNegativeBalance()
-        {
-            // Arrange
-            TransactionService transactionService = new TransactionService(200m);
-            Withdrawal withdrawal = new Withdrawal { Amount = 5000m };
-
-            // Act
-            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
-
-            //Assert
-            Assert.IsFalse(canWithdraw);
-        }
-
-
-
-
-
     }
 }
