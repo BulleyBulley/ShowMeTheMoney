@@ -16,7 +16,7 @@ namespace ShowMeTheMoney.Services
 
         public void DisplayBalance(decimal balance)
         {
-            Console.WriteLine($"Your current balance is: {balance:C}");
+            Console.WriteLine($"Your current balance is: £{balance:F2}");
         }
 
         public string GetUserInput(string prompt)
@@ -29,8 +29,11 @@ namespace ShowMeTheMoney.Services
         {
             foreach (TransactionLog log in transactionLogs)
             {
-                Console.WriteLine($"Date: {log.TransactionDate}, Amount: {log.Amount}, Description: {log.TransactionDescription}, Balance: {log.NewBalance}");
+                Console.WriteLine($"Date: {log.TransactionDate}, Amount: £{log.Amount:F2}, Description: {log.TransactionDescription}, Balance: £{log.NewBalance:F2}");
             }
         }
     }
+
+
 }
+

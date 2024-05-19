@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShowMeTheMoney.ConsoleApp\ShowMeTheMoney.ConsoleApp.csproj" />
     <ProjectReference Include="..\ShowMeTheMoney.Services\ShowMeTheMoney.Services.csproj" />
   </ItemGroup>
 

@@ -79,7 +79,7 @@ namespace ShowMeTheMoney.ConsoleApp
             // Limit to 2 decimal places
             decimal depositAmount = decimal.Round(withdrawalAmount / 2, 2);
 
-            _communicateUser.InformUser($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount} goes back into your account");
+            _communicateUser.InformUser($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount:F2} goes back into your account");
             _transactionService.Deposit(new Deposit { Amount = depositAmount });
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
         }
@@ -123,12 +123,14 @@ namespace ShowMeTheMoney.ConsoleApp
             switch (transactionType.ToLower())
             {
                 case "d":
-                    decimal depositAmount = decimal.Parse(_communicateUser.GetUserInput("How much would you like to deposit?"));
+                    decimal depositAmount = GetValidAmount("How much would you like to deposit?");
                     _transactionService.Deposit(new Deposit { Amount = depositAmount });
+                    //show logs and balance
+                    _communicateUser.DisplayTransactionList(_transactionService.GetTransactionLog());
                     _communicateUser.DisplayBalance(_transactionService.GetBalance());
                     break;
                 case "w":
-                    decimal withdrawAmount = decimal.Parse(_communicateUser.GetUserInput("How much would you like to withdraw?"));
+                    decimal withdrawAmount = GetValidAmount("How much would you like to withdraw?");
                     //checking for sufficient funds
                     if (!_transactionService.CanWithdraw(withdrawAmount))
                     {
@@ -136,6 +138,8 @@ namespace ShowMeTheMoney.ConsoleApp
                         return;
                     }
                     _transactionService.Withdraw(new Withdrawal { Amount = withdrawAmount });
+                    //show logs and balance
+                    _communicateUser.DisplayTransactionList(_transactionService.GetTransactionLog());
                     _communicateUser.DisplayBalance(_transactionService.GetBalance());
                     break;
                 case "p":
@@ -145,6 +149,25 @@ namespace ShowMeTheMoney.ConsoleApp
                 default:
                     _communicateUser.InformUser("Invalid input, please try again");
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Get a valid decimal amount from the user
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns></returns>
+        private decimal GetValidAmount(string prompt)
+        {
+            decimal amount;
+            while (true)
+            {
+                string input = _communicateUser.GetUserInput(prompt);
+                if (!string.IsNullOrWhiteSpace(input) && decimal.TryParse(input, out amount))
+                {
+                    return amount;
+                }
+                _communicateUser.InformUser("Invalid amount. Please enter a valid decimal number.");
             }
         }
 
