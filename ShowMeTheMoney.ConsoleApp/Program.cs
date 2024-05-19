@@ -45,18 +45,18 @@ namespace ShowMeTheMoney.ConsoleApp
             try
             {
                 StartTransactionService();
-                _communicateUser.InformUser($"TransactionService started. Your account has been set up with £ {startingBalance:F2}");
+                _communicateUser.InformUser($"TransactionService started. Your account has been set up with £{startingBalance:F2}");
+
+                InitialDeposits();
+                InitialWithdrawal();
+                MainLoop();
             }
             catch (Exception e)
             {
-                _communicateUser.InformUser("An error occurred. Please restart the application. Error: " + e);
+                _communicateUser.InformUser("An error occurred. Please restart the application. Error: " + e.Message);
             }
-
-            InitialDeposits();
-            InitialWithdrawal();
-            
-            MainLoop();
         }
+
 
         /// <summary>
         /// Initial deposits adds 1500 to the account
@@ -75,11 +75,7 @@ namespace ShowMeTheMoney.ConsoleApp
         {
             HandleWithdrawal(isInitial: true, showLogs: false);
             //check _transactionService is not null
-            if (_transactionService != null)
-            {
-                _communicateUser.DisplayBalance(_transactionService.GetBalance());
-            }
-            
+            _communicateUser.DisplayBalance(_transactionService.GetBalance());
         }
 
 
@@ -94,6 +90,7 @@ namespace ShowMeTheMoney.ConsoleApp
                 Thread.Sleep(dialogPause);
             }
 
+            //if not provided, we need to ask how much
             if (amount == 0)
             {
                 amount = GetValidAmount("How much would you like to deposit?");
@@ -157,7 +154,7 @@ namespace ShowMeTheMoney.ConsoleApp
 
             decimal depositAmount = withdrawalAmount / 2;
 
-            HandleDeposit($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount:F2} goes back into your account",amount: depositAmount, showLogs: false);
+            HandleDeposit($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount:F2} goes back into your account", amount: depositAmount, showLogs: false);
         }
 
         /// <summary>
