@@ -26,6 +26,21 @@ namespace ShowMeTheMoneyTestProject
         }
 
         [Test]
+        // a setup transation log is created on initialisation
+        public void InstantiatingCreatesLog()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+
+            // Act
+            List<TransactionLog> transactionLog = transactionService.GetTransactionLog();
+
+            // Assert
+            Assert.That(transactionLog.Count, Is.EqualTo(1));
+            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Setup));
+        }
+
+        [Test]
         // Depositing 100 should increase the balance to 300
         public void DepositIncreasesBalance()
         {
@@ -81,8 +96,8 @@ namespace ShowMeTheMoneyTestProject
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
-            Deposit deposit = new Deposit { Amount = 100m};
-            Withdrawal withdrawal = new Withdrawal { Amount = 50m};
+            Deposit deposit = new Deposit { Amount = 100m };
+            Withdrawal withdrawal = new Withdrawal { Amount = 50m };
 
             // Act
             transactionService.Deposit(deposit);
@@ -99,8 +114,8 @@ namespace ShowMeTheMoneyTestProject
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
-            Deposit deposit = new Deposit { Amount = 100m};
-            Withdrawal withdrawal = new Withdrawal { Amount = 50m};
+            Deposit deposit = new Deposit { Amount = 100m };
+            Withdrawal withdrawal = new Withdrawal { Amount = 50m };
 
             // Act
             transactionService.Deposit(deposit);
@@ -154,7 +169,7 @@ namespace ShowMeTheMoneyTestProject
 
             //Assert
             Assert.IsFalse(canWithdraw);
-            
+
         }
 
         [Test]
@@ -217,20 +232,7 @@ namespace ShowMeTheMoneyTestProject
             Assert.IsFalse(canWithdraw);
         }
 
-        [Test]
-        // a setup transation log is created on initialisation
-        public void SetupTransactionLogIsCreatedOnInitialisation()
-        {
-            // Arrange
-            TransactionService transactionService = new TransactionService(200m);
 
-            // Act
-            List<TransactionLog> transactionLog = transactionService.GetTransactionLog();
-
-            // Assert
-            Assert.That(transactionLog.Count, Is.EqualTo(1));
-            Assert.That(transactionLog[0].TransactionDescription, Is.EqualTo(TransactionLog.TransactionType.Setup));
-        }
 
 
 
