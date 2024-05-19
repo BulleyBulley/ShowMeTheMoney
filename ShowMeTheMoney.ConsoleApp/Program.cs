@@ -8,54 +8,95 @@ namespace ShowMeTheMoney.ConsoleApp
 {
     internal class Program
     {
-        private TransactionService _transactionService = new TransactionService(200m);
+        private TransactionService _transactionService;
         private CommunicateUser _communicateUser = new CommunicateUser();
         private int dialogPause = 1000;
+        private decimal startingBalance = 200m;
 
         static void Main(string[] args)
         {
             Program program = new Program();
-            program.RunApp();
+            try
+            {
+                program.RunApp();
+            }
+            catch (Exception e)
+            {
+                program._communicateUser.InformUser("An error occurred. Please restart the application. Error: " + e);
+            }
+
         }
 
         /// <summary>
-        /// Run the application
+        /// Start the transaction service
+        /// </summary>
+        private void StartTransactionService()
+        {
+            _transactionService = new TransactionService(startingBalance);
+        }
+
+        /// <summary>
+        /// Run the application - entry point
         /// </summary>
         private void RunApp()
         {
             _communicateUser.InformUser("Welcome to Show Me The Money!");
 
+            try
+            {
+                StartTransactionService();
+                _communicateUser.InformUser($"TransactionService started. Your account has been set up with £ {startingBalance:F2}");
+            }
+            catch (Exception e)
+            {
+                _communicateUser.InformUser("An error occurred. Please restart the application. Error: " + e);
+            }
+
             InitialDeposits();
             InitialWithdrawal();
-;            
+            
             MainLoop();
         }
 
         /// <summary>
-        /// Initial deposits
+        /// Initial deposits adds 1500 to the account
         /// </summary>
         private void InitialDeposits()
         {
-            _communicateUser.InformUser("Congratulations!! A not at all suspicious email has given you £200");
             Thread.Sleep(dialogPause);
-            HandleDeposit(1500m, "And now they're depositing a further £1500 into your account", showLogs: false);
-            _communicateUser.DisplayBalance(_transactionService.GetBalance());
-        }
-
-        private void InitialWithdrawal()
-        {
-            HandleWithdrawal(isInitial: true, showLogs: false);
+            HandleDeposit("A further £1500 has been deposited into your account", 1500m, showLogs: false);
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
         }
 
         /// <summary>
+        /// Initial withdrawal
+        /// </summary>
+        private void InitialWithdrawal()
+        {
+            HandleWithdrawal(isInitial: true, showLogs: false);
+            //check _transactionService is not null
+            if (_transactionService != null)
+            {
+                _communicateUser.DisplayBalance(_transactionService.GetBalance());
+            }
+            
+        }
+
+
+        /// <summary>
         /// Handle deposit
         /// </summary>
-        private void HandleDeposit(decimal amount, string message = null, bool showLogs = false)
+        private void HandleDeposit(string message = null, decimal amount = 0, bool showLogs = false)
         {
             if (!string.IsNullOrEmpty(message))
             {
                 _communicateUser.InformUser(message);
+                Thread.Sleep(dialogPause);
+            }
+
+            if (amount == 0)
+            {
+                amount = GetValidAmount("How much would you like to deposit?");
             }
 
             // Deposit the amount
@@ -114,11 +155,9 @@ namespace ShowMeTheMoney.ConsoleApp
         {
             Thread.Sleep(dialogPause);
 
-            // Limit to 2 decimal places
-            decimal depositAmount = decimal.Round(withdrawalAmount / 2, 2);
+            decimal depositAmount = withdrawalAmount / 2;
 
-            _communicateUser.InformUser($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount:F2} goes back into your account");
-            HandleDeposit(depositAmount, showLogs: false);
+            HandleDeposit($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount:F2} goes back into your account",amount: depositAmount, showLogs: false);
         }
 
         /// <summary>
@@ -158,8 +197,7 @@ namespace ShowMeTheMoney.ConsoleApp
             switch (transactionType.ToLower())
             {
                 case "d":
-                    decimal depositAmount = GetValidAmount("How much would you like to deposit?");
-                    HandleDeposit(depositAmount, $"Depositing £{depositAmount:F2}", showLogs: true);
+                    HandleDeposit(showLogs: true);
                     break;
                 case "w":
                     HandleWithdrawal(showLogs: true);
