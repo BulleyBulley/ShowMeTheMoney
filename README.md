@@ -1,20 +1,13 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Tasks
+Task 1: Instantiate a TransactionService with a balance of 200 and inform the user that this has happened
+Task 2: Deposit 1500 and return the balance in a readable format
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Task 3: Withdraw an amount determined by the user and return the balance in a readable format
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Task 4: Deposit half the the amount withdrawn by the user
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+Task 5: Ask the user if they want to continue with the program
+Task 6: If yes, ask the user if they want to deposit or withdraw, and handle accordingly
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+Task 7: Print the transaction list to the user
+

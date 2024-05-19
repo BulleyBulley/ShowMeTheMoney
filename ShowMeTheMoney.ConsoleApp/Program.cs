@@ -1,5 +1,8 @@
 ﻿using ShowMeTheMoney.Models;
 using ShowMeTheMoney.Services;
+using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace ShowMeTheMoney.ConsoleApp
 {
@@ -8,25 +11,11 @@ namespace ShowMeTheMoney.ConsoleApp
         private TransactionService _transactionService = new TransactionService(200m);
         private CommunicateUser _communicateUser = new CommunicateUser();
         private int dialogPause = 1000;
+
         static void Main(string[] args)
         {
             Program program = new Program();
             program.RunApp();
-
-            // Task 1: Instantiate a TransactionService with a balance of 200 and inform the user that this has happened
-
-            // Task 2: Deposit 1500 and return the balance in a readable format
-
-            // Task 3: Withdraw an amount determined by the user and return the balance in a readable format
-
-            // Task 4: Deposit half the the amount withdrawn by the user
-
-            // Task 5: Ask the user if they want to continue with the program
-
-            // Task 6: If yes, ask the user if they want to deposit or withdraw, and handle accordingly
-
-            // Task 7: Print the transaction list to the user
-
         }
 
         /// <summary>
@@ -38,6 +27,7 @@ namespace ShowMeTheMoney.ConsoleApp
 
             InitialDeposits();
             InitialWithdrawal();
+;            
             MainLoop();
         }
 
@@ -47,37 +37,79 @@ namespace ShowMeTheMoney.ConsoleApp
         private void InitialDeposits()
         {
             _communicateUser.InformUser("Congratulations!! A not at all suspicious email has given you £200");
-            //pause to make the dialog more readable
-            System.Threading.Thread.Sleep(dialogPause);
-            _communicateUser.InformUser("And now they're depositing a further £1500 into your account");
-            System.Threading.Thread.Sleep(dialogPause);
-            _transactionService.Deposit(new Deposit { Amount = 1500m });
+            Thread.Sleep(dialogPause);
+            HandleDeposit(1500m, "And now they're depositing a further £1500 into your account", showLogs: false);
+            _communicateUser.DisplayBalance(_transactionService.GetBalance());
+        }
+
+        private void InitialWithdrawal()
+        {
+            HandleWithdrawal(isInitial: true, showLogs: false);
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
         }
 
         /// <summary>
-        /// Initial withdrawal and subsequent deposit
+        /// Handle deposit
         /// </summary>
-        private void InitialWithdrawal()
+        private void HandleDeposit(decimal amount, string message = null, bool showLogs = false)
         {
-            decimal withdrawalAmount;
+            if (!string.IsNullOrEmpty(message))
+            {
+                _communicateUser.InformUser(message);
+            }
 
+            // Deposit the amount
+            _transactionService.Deposit(new Deposit { Amount = amount });
+
+            // Show the balance and transaction list
+            if (showLogs)
+            {
+                _communicateUser.DisplayBalance(_transactionService.GetBalance());
+                _communicateUser.DisplayTransactionList(_transactionService.GetTransactionLog());
+            }
+        }
+
+        /// <summary>
+        /// Handle withdrawal
+        /// </summary>
+        private void HandleWithdrawal(string message = null, bool showLogs = false, bool isInitial = false)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                _communicateUser.InformUser(message);
+            }
+
+            decimal amount;
             while (true)
             {
-                withdrawalAmount = decimal.Parse(_communicateUser.GetUserInput("How much would you like to withdraw?"));
-
-                if (_transactionService.CanWithdraw(withdrawalAmount))
+                amount = GetValidAmount("How much would you like to withdraw?");
+                if (_transactionService.CanWithdraw(amount))
                 {
-                    _transactionService.Withdraw(new Withdrawal { Amount = withdrawalAmount });
+                    _communicateUser.InformUser($"Withdrawing £{amount:F2}");
+                    _transactionService.Withdraw(new Withdrawal { Amount = amount });
                     break;
                 }
 
                 _communicateUser.InformUser("Insufficient funds. Please enter a different amount.");
             }
+
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
-            DepositHalfWithdrawal(withdrawalAmount);
+
+            if (isInitial)
+            {
+                DepositHalfWithdrawal(amount);
+            }
+            else if (showLogs)
+            {
+                _communicateUser.DisplayTransactionList(_transactionService.GetTransactionLog());
+            }
         }
 
+
+        /// <summary>
+        /// Deposit half of the withdrawal amount
+        /// </summary>
+        /// <param name="withdrawalAmount"></param>
         private void DepositHalfWithdrawal(decimal withdrawalAmount)
         {
             Thread.Sleep(dialogPause);
@@ -86,13 +118,11 @@ namespace ShowMeTheMoney.ConsoleApp
             decimal depositAmount = decimal.Round(withdrawalAmount / 2, 2);
 
             _communicateUser.InformUser($"More good luck, you've won a beauty contest that you didn't even enter and they're depositing half your withdrawal, so £{depositAmount:F2} goes back into your account");
-            _transactionService.Deposit(new Deposit { Amount = depositAmount });
-            _communicateUser.DisplayBalance(_transactionService.GetBalance());
+            HandleDeposit(depositAmount, showLogs: false);
         }
 
-
         /// <summary>
-        /// main loop of the program
+        /// Main loop of the program
         /// </summary>
         private void MainLoop()
         {
@@ -112,7 +142,6 @@ namespace ShowMeTheMoney.ConsoleApp
         private bool AskContinue()
         {
             string response = _communicateUser.GetUserInput("Would you like to continue? Please enter 'y' or 'n'");
-            // if something other than y or n is entered, ask again
             while (response.ToLower() != "y" && response.ToLower() != "n")
             {
                 response = _communicateUser.GetUserInput("Invalid input, please enter 'y' or 'n'");
@@ -130,23 +159,10 @@ namespace ShowMeTheMoney.ConsoleApp
             {
                 case "d":
                     decimal depositAmount = GetValidAmount("How much would you like to deposit?");
-                    _transactionService.Deposit(new Deposit { Amount = depositAmount });
-                    //show logs and balance
-                    _communicateUser.DisplayTransactionList(_transactionService.GetTransactionLog());
-                    _communicateUser.DisplayBalance(_transactionService.GetBalance());
+                    HandleDeposit(depositAmount, $"Depositing £{depositAmount:F2}", showLogs: true);
                     break;
                 case "w":
-                    decimal withdrawAmount = GetValidAmount("How much would you like to withdraw?");
-                    //checking for sufficient funds
-                    if (!_transactionService.CanWithdraw(withdrawAmount))
-                    {
-                        _communicateUser.InformUser("Insufficient funds");
-                        return;
-                    }
-                    _transactionService.Withdraw(new Withdrawal { Amount = withdrawAmount });
-                    //show logs and balance
-                    _communicateUser.DisplayTransactionList(_transactionService.GetTransactionLog());
-                    _communicateUser.DisplayBalance(_transactionService.GetBalance());
+                    HandleWithdrawal(showLogs: true);
                     break;
                 case "p":
                     List<TransactionLog> transactionLogs = _transactionService.GetTransactionLog();
@@ -169,7 +185,6 @@ namespace ShowMeTheMoney.ConsoleApp
             while (true)
             {
                 string input = _communicateUser.GetUserInput(prompt);
-                // Check if the input is a valid decimal number and greater than 0
                 if (!string.IsNullOrWhiteSpace(input) && decimal.TryParse(input, out amount) && amount > 0)
                 {
                     return amount;
@@ -177,8 +192,5 @@ namespace ShowMeTheMoney.ConsoleApp
                 _communicateUser.InformUser("Invalid amount. Please enter a valid decimal number greater than 0.");
             }
         }
-
-
-
     }
 }
