@@ -61,6 +61,20 @@ namespace ShowMeTheMoney.Services
             return newBalance;
         }
 
+        /// <summary>
+        /// Checks if the amount can be withdrawn
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public bool CanWithdraw(decimal amount)
+        {
+            return _balance >= amount;
+        }
+
+        /// <summary>
+        /// Adds a transaction to the list
+        /// </summary>
+        /// <param name="transactionLog"></param>
         private void AddTransactionToList(TransactionLog transactionLog)
         {
 
@@ -70,6 +84,10 @@ namespace ShowMeTheMoney.Services
             _transactionLog.Add(transactionLog);
         }
 
+        /// <summary>
+        /// returns the transaction log
+        /// </summary>
+        /// <returns></returns>
         public List<TransactionLog> GetTransactionLog()
         {
             return _transactionLog;

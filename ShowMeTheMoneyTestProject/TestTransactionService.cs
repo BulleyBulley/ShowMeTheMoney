@@ -59,7 +59,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a balance of 250
-        public void DepositAndWithdraw()
+        public void DepositAndWithdrawGivesCorrectBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -77,7 +77,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a transaction log with 2 entries
-        public void TransactionLog()
+        public void DepositAndWithdrawGivesCorrectTransactionLogAmount()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -95,7 +95,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a transaction log with the correct entries
-        public void TransactionLogEntries()
+        public void DepositAndWithdrawGivesCorrectTransactionLogEntries()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -116,7 +116,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a transaction log with the correct balances
-        public void TransactionLogBalances()
+        public void DepositAndWithdrawGivesCorrectTransactionLogBalances()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -133,6 +133,37 @@ namespace ShowMeTheMoneyTestProject
             Assert.That(transactionLog[0].NewBalance, Is.EqualTo(300m));
             Assert.That(transactionLog[1].OldBalance, Is.EqualTo(300m));
             Assert.That(transactionLog[1].NewBalance, Is.EqualTo(250m));
+        }
+
+        [Test]
+        //CanWithdraw returns false with insufficient balance
+        public void CanWithdrawReturnsFalseWithInsufficientBalance()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+            Withdrawal withdrawal = new Withdrawal { Amount = 5000m };
+
+            // Act
+            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
+
+            //Assert
+            Assert.IsFalse(canWithdraw);
+            
+        }
+
+        [Test]
+        //CanWithdraw returns true with sufficient balance
+        public void CanWithdrawReturnsTrueWithSufficientBalance()
+        {
+            // Arrange
+            TransactionService transactionService = new TransactionService(200m);
+            Withdrawal withdrawal = new Withdrawal { Amount = 50m };
+
+            // Act
+            bool canWithdraw = transactionService.CanWithdraw(withdrawal.Amount);
+
+            //Assert
+            Assert.IsTrue(canWithdraw);
         }
     }
 }

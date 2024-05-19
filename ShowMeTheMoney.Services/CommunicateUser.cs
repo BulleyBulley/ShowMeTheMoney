@@ -9,28 +9,27 @@ namespace ShowMeTheMoney.Services
 {
     public class CommunicateUser
     {
-        public static void InformUser(string message)
+        public void InformUser(string message)
         {
             Console.WriteLine(message);
         }
 
-        public static string GetUserInput(string message)
+        public void DisplayBalance(decimal balance)
         {
-            Console.WriteLine(message);
+            Console.WriteLine($"Your current balance is: {balance:C}");
+        }
+
+        public string GetUserInput(string prompt)
+        {
+            Console.WriteLine(prompt);
             return Console.ReadLine();
         }
 
-        public static void DisplayBalance(decimal balance)
+        public void DisplayTransactionList(List<TransactionLog> transactionLogs)
         {
-            Console.WriteLine($"Your balance is £{balance}");
-        }
-
-        public static void DisplayTransactionList(List<TransactionLog> transactions)
-        {
-            Console.WriteLine("Transaction List:");
-            foreach (var transaction in transactions)
+            foreach (TransactionLog log in transactionLogs)
             {
-                Console.WriteLine(transaction);
+                Console.WriteLine($"Date: {log.TransactionDate}, Amount: {log.Amount}, Description: {log.TransactionDescription}, Balance: {log.NewBalance}");
             }
         }
     }
