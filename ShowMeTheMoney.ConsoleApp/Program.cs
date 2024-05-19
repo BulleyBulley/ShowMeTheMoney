@@ -47,9 +47,9 @@ namespace ShowMeTheMoney.ConsoleApp
         private void InitialDeposits()
         {
             _communicateUser.InformUser("Congratulations!! A not at all suspicious email has given you £200");
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1500);
             _communicateUser.InformUser("And now they're depositing a further £1500 into your account");
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(1500);
             _transactionService.Deposit(new Deposit { Amount = 1500m });
             _communicateUser.DisplayBalance(_transactionService.GetBalance());
         }
