@@ -42,7 +42,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 should increase the balance to 300
-        public void DepositIncreasesBalance()
+        public void Deposit_IncreasesBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -58,7 +58,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Withdrawing 100 should decrease the balance to 100
-        public void WithdrawDecreasesBalance()
+        public void Withdraw_DecreasesBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -74,7 +74,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a balance of 250
-        public void DepositAndWithdrawGivesCorrectBalance()
+        public void DepositAndWithdraw_GivesCorrectBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -92,7 +92,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a transaction log with 3 entries (setup creates one)
-        public void DepositAndWithdrawGivesCorrectTransactionLogAmount()
+        public void DepositAndWithdraw_GivesCorrectTransactionLogAmount()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -110,7 +110,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a transaction log with the correct entries
-        public void DepositAndWithdrawGivesCorrectTransactionLogEntries()
+        public void DepositAndWithdraw_GivesCorrectTransactionLogEntries()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -133,7 +133,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         // Depositing 100 and withdrawing 50 should result in a transaction log with the correct balances
-        public void DepositAndWithdrawGivesCorrectTransactionLogBalances()
+        public void DepositAndWithdraw_GivesCorrectTransactionLogBalances()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -158,7 +158,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         //CanWithdraw returns false with insufficient balance
-        public void CanWithdrawReturnsFalseWithInsufficientBalance()
+        public void CanWithdraw_ReturnsFalseWithInsufficientBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -174,7 +174,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         //CanWithdraw returns true with sufficient balance
-        public void CanWithdrawReturnsTrueWithSufficientBalance()
+        public void CanWithdraw_ReturnsTrueWithSufficientBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
@@ -189,7 +189,7 @@ namespace ShowMeTheMoneyTestProject
 
         [Test]
         //CanWithdraw returns true with exact balance
-        public void CanWithdrawReturnsTrueWithExactBalance()
+        public void CanWithdraw_ReturnsTrueWithExactBalance()
         {
             // Arrange
             TransactionService transactionService = new TransactionService(200m);
