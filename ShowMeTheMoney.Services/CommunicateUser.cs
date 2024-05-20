@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShowMeTheMoney.Services
 {
-    public class CommunicateUser
+    public class CommunicateUser : ICommunicateUser
     {
         public void InformUser(string message)
         {

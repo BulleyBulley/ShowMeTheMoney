@@ -3,7 +3,7 @@
 
 namespace ShowMeTheMoney.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
     {
         private decimal _balance = 0m;
         private List<TransactionLog> _transactionLog = new List<TransactionLog>();
